@@ -6,6 +6,6 @@ This is a course requirement for CS191/192 Software Engineering Course of the De
 Legends
 
 Jahziel Rae M. Arceo
-
 Ethan Fredric Y. Tan
+
 <member 3>
