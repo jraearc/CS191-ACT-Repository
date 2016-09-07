@@ -6,4 +6,4 @@
 
 <p>Jahziel Rae M. Arceo<br>
 Ethan Fredric Y. Tan<br>
-<member 3></p>
+Hans Gustaf G. Capiral</p>
