@@ -540,7 +540,7 @@ map1 = Map(3,10,player) # character starts in the middle of a market street, can
 map1.mapElements[1][9].event = Transition1()
 map1.mapElements[1][9].flag = True
 states = []
-states.append(Battle1(player))
+states.append(Scene1())
 
 def update(dt):
 	if len(states):
