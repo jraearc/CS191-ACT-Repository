@@ -426,45 +426,72 @@ class Scene2:
 
 class Battle1:
 	def __init__(self,player):
+		self.backgroundSoundPlayer = pyglet.media.Player()
+		self.backgroundSoundPlayer2 = pyglet.media.Player()
+		self.backgroundSoundPlayer3 = pyglet.media.Player()
+		self.backgroundSoundPlayer4 = pyglet.media.Player()
+		self.backgroundSoundPlayer5 = pyglet.media.Player()
+		self.backgroundSoundPlayer.position = (player.x-1, player.y, 0)
+		self.backgroundSoundPlayer.queue(pyglet.media.load("battlemode.mp3"))
+		self.backgroundSoundPlayer2.queue(pyglet.media.load("sword.wav"))
+		self.backgroundSoundPlayer2.position = (player.x-1, player.y, 0)
+		self.backgroundSoundPlayer3.queue(pyglet.media.load("hit.wav"))
+		self.backgroundSoundPlayer3.position = (player.x-1, player.y, 0)
 		self.text = ["(You are fighting the captain of the guards!)"]
+		self.backgroundSoundPlayer4.queue(pyglet.media.load("battlebg.mp3"))
+		self.backgroundSoundPlayer4.play()
 		self.t = 0
 		self.start = False
 		self.str = 5
 		self.EnemyHealth = 20
 		self.player = player
 		self.block = False
+		self.willExit = False
 	def update(self,dt):
 		if not self.start:
 			print self.text[self.t]
+			self.backgroundSoundPlayer.play()
 			self.t += 1
 			self.start = True
-		if random.randint(1,50) == 1:
-			if self.block:
-				print "*block*"
-			else:
-				self.player.health = float(self.player.health) - float(self.str)
-				self.player.health = int(self.player.health)
-				print "Health: " + str(self.player.health) + "/100"
-		@window.event
-		def on_key_press(symbol, modifiers):
-			if symbol == pyglet.window.key.SPACE and not self.block:
-				self.EnemyHealth = float(self.EnemyHealth) - float(self.player.str)
-				self.EnemyHealth = int(self.EnemyHealth)
-				print "Enemy Health: " + str(self.EnemyHealth)
-			if symbol == pyglet.window.key.UP:
-				self.block = True
-		@window.event
-		def on_key_release(symbol, modifiers):
-			if symbol == pyglet.window.key.UP:
-				self.block = False
-		if self.EnemyHealth <= 0:
-			print "Victory!"
-			states.remove(self)
-			states.append(Scene3())
-		if self.player.health <= 0:
+		if(self.player.health > 0):
+			if random.randint(1,50) == 1:
+				if self.block:
+					print "*block*"
+				else:
+					self.backgroundSoundPlayer3.play()
+					self.backgroundSoundPlayer3.queue(pyglet.media.load("hit.wav"))
+					self.player.health = float(self.player.health) - float(self.str)
+					self.player.health = int(self.player.health)
+					print "Health: " + str(self.player.health) + "/100"
+			@window.event
+			def on_key_press(symbol, modifiers):
+				if symbol == pyglet.window.key.SPACE:
+					self.backgroundSoundPlayer2.play()
+					self.backgroundSoundPlayer2.queue(pyglet.media.load("sword.wav"))
+				if symbol == pyglet.window.key.SPACE and not self.block:
+					self.EnemyHealth = float(self.EnemyHealth) - float(self.player.str)
+					self.EnemyHealth = int(self.EnemyHealth)
+					print "Enemy Health: " + str(self.EnemyHealth)
+				if symbol == pyglet.window.key.UP:
+					self.block = True
+			@window.event
+			def on_key_release(symbol, modifiers):
+				if symbol == pyglet.window.key.UP:
+					self.block = False
+			if self.EnemyHealth <= 0:
+				print "Victory!"
+				self.backgroundSoundPlayer4.pause()
+				self.backgroundSoundPlayer5.queue(pyglet.media.load("win.mp3"))
+				self.backgroundSoundPlayer5.play()
+				states.remove(self)
+				states.append(Scene3())
+			if self.player.health <= 0:
+				self.backgroundSoundPlayer4.pause()
+				self.backgroundSoundPlayer5.queue(pyglet.media.load("lose.wav"))
+				self.backgroundSoundPlayer5.play()
+		else:
 			print "Defeat..."
 			states.remove(self)
-			states.append(Scene3())
 
 class Scene3:
 	def __init__(self):
@@ -513,7 +540,7 @@ map1 = Map(3,10,player) # character starts in the middle of a market street, can
 map1.mapElements[1][9].event = Transition1()
 map1.mapElements[1][9].flag = True
 states = []
-states.append(Scene1())
+states.append(Battle1(player))
 
 def update(dt):
 	if len(states):
