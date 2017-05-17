@@ -1,0 +1,5 @@
+Note: This is a beta release given to testers from the UP community. Please contact the developers regarding feedbacks about the software.
+
+Dependencies needed: AVbin and OpenAL is required to play this game. Please see the archive which includes this setup application.
+
+Press Next to proceed with installation.
